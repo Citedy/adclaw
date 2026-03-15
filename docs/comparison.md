@@ -9,7 +9,6 @@ AdClaw is a fully reworked fork of [CoPaw](https://github.com/agentscope-ai/CoPa
 | Capability | AdClaw | OpenClaw | Hermes Agent | CoPaw | CrewAI | Dify |
 |---|---|---|---|---|---|---|
 | **Focus** | AI Marketing Team | Personal Agent | Self-Learning Agent | Personal Agent | Multi-Agent Framework | LLM App Platform |
-| **Stars** | New | 247K | 7.4K | 11K | 46K | 100K |
 | **Multi-Agent** | Personas + coordinator | Single agent | Subagent dispatch | Single agent | Role-based crews | No |
 | **Built-in Skills** | 118 (security-scanned) | 13,700+ (community) | 40+ | ~50 | Custom | Plugins |
 | **Marketing Tools** | 52 via Citedy MCP | None | None | None | None | None |
