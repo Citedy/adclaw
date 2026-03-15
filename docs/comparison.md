@@ -16,7 +16,7 @@ AdClaw is a fully reworked fork of [CoPaw](https://github.com/agentscope-ai/CoPa
 | **Web Dashboard** | Yes (personas, tabs, cron) | Basic | CLI/TUI | Basic | No | Yes |
 | **Memory** | Dual: ReMe + AOM (vector+FTS) | Markdown files | 3-layer (episodic+semantic+procedural) | ReMe | Short-term | RAG |
 | **Memory Optimization** | R1-R4 (4 layers) | None | LLM summarization | None | None | None |
-| **Self-Learning** | No | No | Yes (auto skill creation) | No | No | No |
+| **Self-Learning** | Partial (skill-creator + auto-heal) | No | Yes (auto skill creation) | No | No | No |
 | **Security Scanner** | 208 patterns + LLM audit | None (820+ malicious skills found) | None | None | None | None |
 | **Self-Healing Skills** | Yes | No | Self-evolution (DSPy+GEPA) | No | No | No |
 | **Cron Scheduling** | Per-persona | Plugin-based | Yes | Basic | No | No |
