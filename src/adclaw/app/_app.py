@@ -105,6 +105,12 @@ async def lifespan(app: FastAPI):  # pylint: disable=too-many-statements
         config=config,
         on_last_dispatch=update_last_dispatch,
     )
+    # Wire manager ↔ channels for force_clear and timeout
+    from ..constant import WORKING_DIR
+    channel_manager.set_session_dir(str(WORKING_DIR / "sessions"))
+    for ch in channel_manager.channels:
+        ch.set_channel_manager(channel_manager)
+
     await channel_manager.start_all()
 
     # --- cron init/start ---

@@ -318,7 +318,7 @@ class TelegramChannel(BaseChannel):
             text = raw_text.split("@")[0] if raw_text.startswith("/") else raw_text
 
             if text in _MENU_BUTTONS or text in _DIRECT_COMMANDS:
-                await self._handle_menu_command(chat_id, text)
+                await self._handle_menu_command(chat_id, text, meta=meta)
                 return
 
             (
@@ -474,8 +474,15 @@ class TelegramChannel(BaseChannel):
                     pass
                 return
 
-            # --- Legacy commands (/clear, /compact, /history) ---
-            if data in ("/new", "/clear", "/compact", "/history"):
+            # /clear bypasses queue in callbacks too
+            if data == "/clear":
+                user = query.from_user
+                sender_id = str(user.id) if user else chat_id
+                await self._force_clear_session(chat_id, sender_id)
+                return
+
+            # --- Legacy commands (/compact, /history) ---
+            if data in ("/new", "/compact", "/history"):
                 user = query.from_user
                 sender_id = str(user.id) if user else chat_id
                 content_parts = [
@@ -856,7 +863,7 @@ class TelegramChannel(BaseChannel):
         return InlineKeyboardMarkup(buttons)
 
     async def _handle_menu_command(
-        self, chat_id: str, command: str
+        self, chat_id: str, command: str, *, meta: Optional[dict] = None,
     ) -> bool:
         """Handle menu button commands. Returns True if handled."""
         bot = self._application.bot if self._application else None
@@ -1040,8 +1047,15 @@ class TelegramChannel(BaseChannel):
                 self._enqueue(native)
             return True
 
-        # Forward agent-handled commands (/compact, /clear, /history)
-        if command in ("/compact", "/clear", "/history"):
+        # /clear bypasses queue — directly resets session
+        if command == "/clear":
+            # Debounce key is sender_id (user_id), not chat_id (differs in groups)
+            sender_id = (meta or {}).get("user_id") or chat_id
+            await self._force_clear_session(chat_id, sender_id)
+            return True
+
+        # Forward agent-handled commands (/compact, /history)
+        if command in ("/compact", "/history"):
             content_parts = [
                 TextContent(type=ContentType.TEXT, text=command),
             ]
@@ -1064,6 +1078,40 @@ class TelegramChannel(BaseChannel):
             return True
 
         return False
+
+    async def _force_clear_session(
+        self, chat_id: str, sender_id: Optional[str] = None,
+    ) -> None:
+        """Clear session bypassing the message queue entirely."""
+        if not chat_id:
+            logger.warning("_force_clear_session: empty chat_id")
+            return
+        bot = self._application.bot if self._application else None
+        # Debounce key is sender_id (= user_id); fallback to chat_id for private chats
+        key = sender_id or chat_id
+        mgr = self._channel_manager
+        if mgr:
+            await mgr.force_clear_session(self.channel, key)
+        else:
+            logger.warning("_force_clear_session: no channel_manager wired")
+        if bot:
+            await bot.send_message(
+                chat_id=chat_id,
+                text=(
+                    "*History Cleared!*\n\n"
+                    "- Session reset\n"
+                    "- Memory is now empty\n"
+                    "- Ready for new conversation"
+                ),
+                parse_mode="Markdown",
+                reply_markup=self._build_persistent_keyboard(),
+            )
+
+    async def send_system_message(self, to: str, text: str) -> None:
+        """Send a system message to the user (for timeout notifications)."""
+        bot = self._application.bot if self._application else None
+        if bot:
+            await bot.send_message(chat_id=to, text=text)
 
     async def send(
         self,

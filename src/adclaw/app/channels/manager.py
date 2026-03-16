@@ -130,6 +130,12 @@ class ChannelManager:
         # [image1, text] are not split across workers (avoids no-text
         # debounce reordering and duplicate content in AgentRequest).
         self._key_locks: Dict[Tuple[str, str], asyncio.Lock] = {}
+        # Track current processing tasks for cancellation (force_clear/timeout)
+        self._processing_tasks: Dict[Tuple[str, str], asyncio.Task] = {}
+        # LLM processing timeout (seconds); 0 = no timeout
+        self._processing_timeout: float = 120.0
+        # Session storage reference for file deletion on force_clear
+        self._session_dir: Optional[str] = None
 
     @classmethod
     def from_env(
@@ -215,6 +221,84 @@ class ChannelManager:
 
         return cb
 
+    def set_session_dir(self, session_dir: str) -> None:
+        """Set session directory path for file deletion on force_clear."""
+        self._session_dir = session_dir
+
+    async def force_clear_session(
+        self, channel_id: str, debounce_key: str,
+    ) -> bool:
+        """Clear a session bypassing the queue. Cancels in-progress task,
+        drops pending messages, deletes session files. Returns True if
+        a task was cancelled."""
+        if not debounce_key:
+            logger.warning("force_clear_session: empty debounce_key, skipping")
+            return False
+
+        composite_key = (channel_id, debounce_key)
+
+        # 1. Cancel in-progress processing task
+        task = self._processing_tasks.get(composite_key)
+        was_active = task is not None and not task.done()
+        if was_active:
+            task.cancel()
+            try:
+                await asyncio.wait_for(task, timeout=3.0)
+            except (asyncio.CancelledError, asyncio.TimeoutError, Exception):
+                pass
+
+        # 2. Drop pending messages and release lock state
+        self._pending.pop(composite_key, None)
+        self._in_progress.discard(composite_key)
+        self._processing_tasks.pop(composite_key, None)
+
+        # 3. Delete session files matching this key
+        if self._session_dir and debounce_key:
+            self._delete_session_files(debounce_key)
+
+        logger.info(
+            "force_clear_session: channel=%s key=%s was_active=%s",
+            channel_id, debounce_key, was_active,
+        )
+        return was_active
+
+    def _delete_session_files(self, debounce_key: str) -> None:
+        """Delete all session files matching the debounce key."""
+        import glob
+        from pathlib import Path
+        if not self._session_dir:
+            return
+        # Sanitize key same way as session.py: replace unsafe chars with --
+        sanitized = debounce_key
+        for ch in r'\/:"<>|?*':
+            sanitized = sanitized.replace(ch, "--")
+        pattern = str(Path(self._session_dir) / f"*{sanitized}*.json")
+        for f in glob.glob(pattern):
+            try:
+                Path(f).unlink()
+                logger.info("Deleted session file: %s", f)
+            except OSError as e:
+                logger.warning("Failed to delete session file %s: %s", f, e)
+
+    async def _notify_timeout(
+        self, ch: BaseChannel, key: str, batch: List[Any],
+    ) -> None:
+        """Send timeout notification to user via the channel."""
+        try:
+            # Extract reply target from native payload
+            first = batch[0] if batch else None
+            if not first:
+                return
+            meta = first.get("meta", {}) if isinstance(first, dict) else {}
+            chat_id = meta.get("chat_id") or key
+            await ch.send_system_message(
+                chat_id,
+                "Request timed out. The AI service is responding "
+                "slowly. Please try again or use /clear to reset.",
+            )
+        except Exception:
+            logger.exception("Failed to send timeout notification for key=%s", key)
+
     def _enqueue_one(self, channel_id: str, payload: Any) -> None:
         """Run on event loop: enqueue or append to pending if session in
         progress.
@@ -293,12 +377,54 @@ class ChannelManager:
                 async with key_lock:
                     self._in_progress.add((channel_id, key))
                     batch = _drain_same_key(q, ch, key, payload)
+                composite = (channel_id, key)
+                task = asyncio.create_task(_process_batch(ch, batch))
+                self._processing_tasks[composite] = task
                 try:
-                    await _process_batch(ch, batch)
+                    if self._processing_timeout > 0:
+                        done, _ = await asyncio.wait(
+                            {task}, timeout=self._processing_timeout,
+                        )
+                        if not done:
+                            # Timeout — task still running
+                            logger.warning(
+                                "Processing timed out: channel=%s key=%s after %.0fs",
+                                channel_id, key, self._processing_timeout,
+                            )
+                            task.cancel()
+                            try:
+                                await asyncio.wait_for(task, timeout=5.0)
+                            except (asyncio.CancelledError, asyncio.TimeoutError, Exception):
+                                pass
+                            await self._notify_timeout(ch, key, batch)
+                        elif task.cancelled():
+                            # force_clear cancelled the task — worker continues
+                            logger.info("Processing cancelled (force_clear): key=%s", key)
+                        elif task.exception():
+                            logger.exception(
+                                "Processing failed: channel=%s key=%s",
+                                channel_id, key,
+                                exc_info=task.exception(),
+                            )
+                    else:
+                        await task
+                except asyncio.CancelledError:
+                    # Shutdown cancel — stop the worker
+                    if not task.done():
+                        task.cancel()
+                    raise
                 finally:
-                    self._in_progress.discard((channel_id, key))
-                    pending = self._pending.pop((channel_id, key), [])
-                    _put_pending_merged(ch, q, pending)
+                    self._processing_tasks.pop(composite, None)
+                    self._in_progress.discard(composite)
+                    pending = self._pending.pop(composite, [])
+                    if not task.cancelled():
+                        _put_pending_merged(ch, q, pending)
+                    else:
+                        if pending:
+                            logger.info(
+                                "Dropping %d pending for cancelled key=%s",
+                                len(pending), key,
+                            )
             except asyncio.CancelledError:
                 break
             except Exception:

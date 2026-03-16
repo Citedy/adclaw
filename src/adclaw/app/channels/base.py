@@ -102,6 +102,15 @@ class BaseChannel(ABC):
         self._debounce_seconds: float = 0.0
         self._debounce_pending: Dict[str, List[Any]] = {}
         self._debounce_timers: Dict[str, asyncio.Task[None]] = {}
+        self._channel_manager: Any = None
+
+    def set_channel_manager(self, manager: Any) -> None:
+        """Set back-reference to ChannelManager for force_clear."""
+        self._channel_manager = manager
+
+    async def send_system_message(self, to: str, text: str) -> None:
+        """Send a system message to the user. Override in subclass."""
+        logger.debug("send_system_message not implemented for %s", self.channel)
 
     def _is_native_payload(self, payload: Any) -> bool:
         """True if payload is a native dict that can be time-debounced."""
