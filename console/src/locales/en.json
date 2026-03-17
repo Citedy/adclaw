@@ -401,7 +401,14 @@
     "testConnectionSuccess": "Connection test successful",
     "testConnectionFailed": "Connection test failed",
     "testConnectionError": "An error occurred while testing connection",
-    "modelTestFailed": "Model validation failed, please check if the model ID is correct"
+    "modelTestFailed": "Model validation failed, please check if the model ID is correct",
+    "openrouterRouting": "Routing Mode",
+    "openrouterRoutingAuto": "Auto — OpenRouter picks optimal model",
+    "openrouterRoutingNitro": "Nitro — fastest provider for selected model",
+    "openrouterRoutingFree": "Free — random free model (testing only)",
+    "openrouterRoutingFloor": "Floor — cheapest provider for selected model",
+    "openrouterRoutingManual": "Manual — choose model directly",
+    "openrouterRoutingInfo": "OpenRouter routing controls how your request is fulfilled. Auto lets OpenRouter pick; Nitro selects the fastest provider; Free uses free-tier models; Floor picks the cheapest provider."
   },
   "agentConfig": {
     "title": "Configuration",

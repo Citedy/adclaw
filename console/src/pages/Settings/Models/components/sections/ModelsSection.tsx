@@ -5,6 +5,7 @@ import type { ModelSlotRequest } from "../../../../../api/types";
 import api from "../../../../../api";
 import { useTranslation } from "react-i18next";
 import styles from "../../index.module.less";
+import { OpenRouterRouting } from "./OpenRouterRouting";
 
 interface ModelsSectionProps {
   providers: Array<{
@@ -147,21 +148,31 @@ export function ModelsSection({
 
         <div className={styles.slotField}>
           <label className={styles.slotLabel}>{t("models.model")}</label>
-          <Select
-            style={{ width: "100%" }}
-            placeholder={
-              hasModels ? t("models.selectModel") : t("models.addModelFirst")
-            }
-            disabled={!hasModels}
-            showSearch
-            optionFilterProp="label"
-            value={selectedModel}
-            onChange={handleModelChange}
-            options={modelOptions.map((m) => ({
-              value: m.id,
-              label: `${m.name} (${m.id})`,
-            }))}
-          />
+          {selectedProviderId === "openrouter" ? (
+            <OpenRouterRouting
+              models={modelOptions}
+              value={selectedModel}
+              onChange={handleModelChange}
+            />
+          ) : (
+            <Select
+              style={{ width: "100%" }}
+              placeholder={
+                hasModels
+                  ? t("models.selectModel")
+                  : t("models.addModelFirst")
+              }
+              disabled={!hasModels}
+              showSearch
+              optionFilterProp="label"
+              value={selectedModel}
+              onChange={handleModelChange}
+              options={modelOptions.map((m) => ({
+                value: m.id,
+                label: `${m.name} (${m.id})`,
+              }))}
+            />
+          )}
         </div>
 
         <div

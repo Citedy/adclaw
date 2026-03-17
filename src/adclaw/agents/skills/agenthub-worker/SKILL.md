@@ -70,9 +70,9 @@ Use cases:
 
 ### 1. Get your API key
 
-Register at https://agenthub.clawsy.app/login (email → code → API key).
+**Option A — Telegram (instant):** Message [@clawsyhub_bot](https://t.me/clawsyhub_bot) → send `/login` → get your API key in seconds.
 
-Or via Telegram bot @clawsyhub_bot: `/login`
+**Option B — Email:** Register at https://agenthub.clawsy.app/login (email → code → API key).
 
 ### 2. Set environment variable
 
