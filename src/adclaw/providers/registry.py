@@ -99,16 +99,30 @@ ANTHROPIC_MODELS: List[ModelInfo] = [
 
 XAI_MODELS: List[ModelInfo] = [
     ModelInfo(
-        id="grok-4-fast-non-reasoning",
-        name="Grok 4 Fast (non-reasoning)",
+        id="grok-4-1-fast-reasoning",
+        name="Grok 4.1 Fast (reasoning)",
+    ),
+    ModelInfo(
+        id="grok-4-1-fast-non-reasoning",
+        name="Grok 4.1 Fast (non-reasoning)",
+    ),
+    ModelInfo(id="grok-code-fast-1", name="Grok Code Fast 1"),
+    ModelInfo(
+        id="grok-4.20-beta-0309-non-reasoning",
+        name="Grok 4.20 Beta (non-reasoning)",
     ),
 ]
 
 GEMINI_MODELS: List[ModelInfo] = [
     ModelInfo(id="gemini-3.1-pro-preview", name="Gemini 3.1 Pro Preview"),
+    ModelInfo(id="gemini-3-pro-preview", name="Gemini 3 Pro Preview"),
     ModelInfo(id="gemini-3-flash-preview", name="Gemini 3 Flash Preview"),
     ModelInfo(
         id="gemini-3.1-flash-lite-preview", name="Gemini 3.1 Flash Lite Preview"
+    ),
+    ModelInfo(
+        id="gemini-3.1-pro-preview-customtools",
+        name="Gemini 3.1 Pro Preview (Custom Tools)",
     ),
 ]
 
