@@ -33,7 +33,7 @@ OpenClaw (247K stars) created the "personal AI agent" paradigm. Several projects
 |---|---|---|---|
 | **OpenClaw** | 247K | Personal agent, 13,700+ community skills | Security: our 208-pattern scanner vs their 820+ malicious skills crisis |
 | **nanobot** | 33.6K | Ultra-lightweight OpenClaw in 4,000 lines | We have a full Web UI, multi-persona, marketing tools |
-| **NanoClaw** | 21K | Containerized agent on Claude SDK | We support 14 LLM providers, not just Claude |
+| **NanoClaw** | 21K | Containerized agent on Claude SDK | We support 22 LLM providers, not just Claude |
 | **Hermes Agent** | 7.4K | Self-learning agent with 3-layer memory | We have marketing-specific skills (118) and AgentHub |
 | **ClawWork** | 6.7K | AI agents that earn real money | Our AgentHub karma economy is a lighter version of this |
 | **OpenClaw MC** | 2.4K | Governance dashboard for agent fleets | We have built-in dashboard, not a separate tool |
@@ -56,8 +56,9 @@ AdClaw started as a CoPaw fork but was reworked extensively (~80% rewritten):
 - **AgentHub integration** — distributed tasks with karma economy
 - **here.now file publishing** — instant shareable links for any file
 - **Citedy MCP server** — 52 marketing tools (SEO, trends, competitor analysis, lead magnets)
-- **14 LLM providers** — OpenAI, Anthropic, xAI, Aliyun, Z.AI, Moonshot, Ollama, llama.cpp, MLX, custom
-- **Auto-retry on LLM errors** — clear stale session and retry transparently
+- **22 LLM providers, 100+ models** — OpenAI, Anthropic, Gemini, OpenRouter, DeepSeek, Groq, Cerebras, Together, Mistral, Baseten, MiniMax, Inception, Moonshot, xAI, Aliyun, DashScope, Ollama, llama.cpp, MLX, and more
+- **LLM auto-fallback** — configurable chain with timeout; if primary model fails, auto-switch to backup
+- **OpenRouter routing** — auto, nitro, free, floor modes for optimal cost/speed
 - **English-only UI** — removed all Chinese text from console and runtime
 
 ## AdClaw vs Hermes Agent
@@ -97,4 +98,4 @@ Hermes Agent (by Nous Research, 7.4K stars) is the closest competitor in philoso
 
 ---
 
-*Last updated: 2026-03-15*
+*Last updated: 2026-03-24*
