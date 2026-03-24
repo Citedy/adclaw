@@ -4,30 +4,69 @@ AdClaw is an AI marketing assistant powered by [Citedy](https://www.citedy.com).
 
 ## Quick Install
 
-```bash
-curl -sSL https://raw.githubusercontent.com/nttylock/AdClaw/main/install.sh | bash
-```
-
-Or with Docker Compose:
+### One-line install (recommended)
 
 ```bash
-git clone https://github.com/nttylock/AdClaw.git
-cd AdClaw
-cp .env.example .env
-# Edit .env with your keys
-docker compose up -d
+curl -fsSL https://get.adclaw.app | bash
 ```
 
-## Manual Docker Run
+This script:
+- Installs Docker if not present
+- Pulls the latest AdClaw image
+- Creates persistent volumes for config and API keys
+- Starts AdClaw on port 8088
+
+**Options:**
+
+```bash
+# With Telegram bot
+curl -fsSL https://get.adclaw.app | bash -s -- --telegram-token "YOUR_BOT_TOKEN"
+
+# Custom port
+curl -fsSL https://get.adclaw.app | bash -s -- --port 9090
+
+# Update to latest
+curl -fsSL https://get.adclaw.app | bash -s -- --update
+
+# Uninstall (preserves data by default)
+curl -fsSL https://get.adclaw.app | bash -s -- --uninstall
+```
+
+**Environment variables** (alternative to flags):
+
+```bash
+TELEGRAM_BOT_TOKEN="123:ABC" CITEDY_API_KEY="citedy_agent_..." \
+  curl -fsSL https://get.adclaw.app | bash
+```
+
+### pip install
+
+```bash
+pip install adclaw
+adclaw init
+adclaw app
+```
+
+### Docker
 
 ```bash
 docker run -d --name adclaw \
   --restart unless-stopped \
   -p 8088:8088 \
   -v adclaw-data:/app/working \
+  -v adclaw-secret:/app/working.secret \
   -e CITEDY_API_KEY=your_citedy_agent_key \
   -e TELEGRAM_BOT_TOKEN=your_telegram_bot_token \
   nttylock/adclaw:latest
+```
+
+### Docker Compose
+
+```bash
+git clone https://github.com/Citedy/adclaw.git
+cd adclaw
+cp .env.example .env  # edit with your keys
+docker compose up -d
 ```
 
 ## First-Run Setup

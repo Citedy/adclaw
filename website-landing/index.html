@@ -249,7 +249,7 @@
 
     /* Responsive */
     @media (max-width: 640px) {
-      .paths, .features-grid { grid-template-columns: 1fr; }
+      .paths, .features-grid, .paths[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
       .hero { padding: 12vh 0 48px; }
       table { font-size: 12px; }
       footer .container { flex-direction: column; gap: 12px; }
@@ -273,15 +273,21 @@
   <div class="container">
     <h1>AI marketing team<br>that runs locally</h1>
     <p class="sub">Create specialized agent personas — researcher, writer, SEO, ads — each with its own LLM, skills, and schedule. 22 LLM providers. 100+ models. 118 built-in skills. Auto-fallback.</p>
-    <div class="install" onclick="copyCmd(this)">
+    <div class="install" onclick="copyCmd(this, 'curl -fsSL https://get.adclaw.app | bash')">
       <span class="prompt">$</span>
-      <span>pip install adclaw</span>
+      <span>curl -fsSL https://get.adclaw.app | bash</span>
       <button class="copy" title="Copy">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
       </button>
     </div>
 
-    <div class="paths">
+    <div class="paths" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="path">
+        <div class="label">one-liner</div>
+        <h3>Auto-install</h3>
+        <p class="desc">Installs Docker if needed. Pulls image, creates volumes, starts AdClaw.</p>
+        <code>curl -fsSL https://get.adclaw.app | bash</code>
+      </div>
       <div class="path">
         <div class="label">pip</div>
         <h3>Lightweight</h3>
@@ -296,6 +302,8 @@ adclaw app</code>
         <p class="desc">Includes 6 browser skills (Playwright, Chromium, screenshots).</p>
         <code>docker run -d --name adclaw \
   -p 8088:8088 \
+  -v adclaw-data:/app/working \
+  -v adclaw-secret:/app/working.secret \
   nttylock/adclaw:latest</code>
       </div>
     </div>
@@ -442,8 +450,8 @@ adclaw app</code>
 </footer>
 
 <script>
-function copyCmd(el) {
-  navigator.clipboard.writeText('pip install adclaw').then(() => {
+function copyCmd(el, cmd) {
+  navigator.clipboard.writeText(cmd || 'curl -fsSL https://get.adclaw.app | bash').then(() => {
     const btn = el.querySelector('.copy');
     btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
     setTimeout(() => {

@@ -133,7 +133,28 @@ AdClaw ships with a built-in **[Clawsy AgentHub](https://www.clawsy.app)** skill
 
 ## Quick Start
 
-### pip install (fastest)
+### One-line install (recommended)
+
+```bash
+curl -fsSL https://get.adclaw.app | bash
+```
+
+Installs Docker if needed, pulls the image, creates persistent volumes, and starts AdClaw. Open http://localhost:8088 when done.
+
+With options:
+
+```bash
+# Custom port + Telegram bot
+curl -fsSL https://get.adclaw.app | bash -s -- --port 9090 --telegram-token "123:ABC"
+
+# Update to latest version
+curl -fsSL https://get.adclaw.app | bash -s -- --update
+
+# Uninstall
+curl -fsSL https://get.adclaw.app | bash -s -- --uninstall
+```
+
+### pip install
 
 ```bash
 pip install adclaw
@@ -150,7 +171,7 @@ pip install adclaw[browser]
 playwright install chromium
 ```
 
-### Docker (all-inclusive, with browser skills)
+### Docker
 
 ```bash
 docker run -d --name adclaw --restart unless-stopped \
@@ -163,8 +184,8 @@ docker run -d --name adclaw --restart unless-stopped \
 ### Docker Compose
 
 ```bash
-git clone https://github.com/nttylock/AdClaw.git
-cd AdClaw
+git clone https://github.com/Citedy/adclaw.git
+cd adclaw
 cp .env.example .env  # edit with your keys
 docker compose up -d
 ```
