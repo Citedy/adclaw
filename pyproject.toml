@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10,<3.14"
 license = {text = "Apache-2.0"}
 dependencies = [
-    "agentscope==1.0.17",
+    "agentscope==1.0.18",
     "agentscope-runtime==1.1.0",
     "discord-py>=2.3",
     "dingtalk-stream>=0.24.3",
