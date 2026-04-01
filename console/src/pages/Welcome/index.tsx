@@ -63,6 +63,7 @@ const WIZARD_PROVIDERS = [
   "openrouter",
   "openai",
   "anthropic",
+  "zai",
   "xai",
   "aliyun-codingplan",
   "ollama",
@@ -211,7 +212,7 @@ export default function WelcomePage() {
     "aliyun-intl": <>qwen3.5-plus, kimi-k2.5, glm-5, MiniMax-M2.5, qwen3-max, qwen3-coder-next, qwen3-coder-plus. <a href="https://www.alibabacloud.com/campaign/benefits?referral_code=A9EXYQ" target="_blank" rel="noopener">Join for $3-10 &rarr;</a></>,
     "aliyun-codingplan": "Same models as Aliyun Intl but China endpoint.",
     ollama: "Run models locally. No API key needed. Install at ollama.com",
-    zai: <>GLM-4.7, GLM-4.6, GLM-4.5 — Z.AI Coding Plan. <a href="https://z.ai/subscribe?ic=DXX7MK5MJT" target="_blank" rel="noopener">$10/month &rarr;</a></>,
+    zai: <>GLM-5, GLM-5 Turbo, GLM-4.7, GLM-4.6, GLM-4.5 — direct from Z.AI. <a href="https://z.ai/subscribe?ic=DXX7MK5MJT" target="_blank" rel="noopener">$10/month &rarr;</a></>,
     moonshot: "Kimi K2.5, K2 Thinking, Moonshot V1. Get key at platform.moonshot.ai",
   };
 
