@@ -84,7 +84,7 @@ async def lifespan(app: FastAPI):  # pylint: disable=too-many-statements
                 from ..agents.model_factory import create_model_and_formatter
                 model, _fmt = create_model_and_formatter()
                 from agentscope.message import Msg
-                resp = await model([Msg(role="user", content=prompt, name="aom")])
+                resp = await model([{"role": "user", "content": prompt}])
                 return resp.content if hasattr(resp, "content") else str(resp)
 
             aom_manager = AOMManager(
