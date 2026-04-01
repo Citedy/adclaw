@@ -141,6 +141,7 @@ class MemoryStore:
         for col, col_type in [
             ("last_verified_at", "TEXT"),
             ("superseded_by", "TEXT"),
+            ("memory_type", "TEXT DEFAULT 'user'"),
         ]:
             try:
                 await self._db.execute(
@@ -180,8 +181,8 @@ class MemoryStore:
                (id, content, content_hash, source_type, source_id,
                 entities, topics, importance, metadata,
                 created_at, updated_at, is_deleted, last_consolidated_at,
-                last_verified_at, superseded_by)
-               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                last_verified_at, superseded_by, memory_type)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (
                 memory.id,
                 memory.content,
@@ -198,6 +199,7 @@ class MemoryStore:
                 memory.last_consolidated_at,
                 memory.last_verified_at,
                 memory.superseded_by,
+                memory.memory_type,
             ),
         )
 
@@ -575,4 +577,5 @@ class MemoryStore:
             last_consolidated_at=row[12],
             last_verified_at=row[13] if len(row) > 13 else None,
             superseded_by=row[14] if len(row) > 14 else None,
+            memory_type=row[15] if len(row) > 15 else "user",
         )

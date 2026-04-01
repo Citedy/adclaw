@@ -167,6 +167,7 @@ class ConsolidationEngine:
         # 3a: Cluster by vector similarity
         clusters: List[List[str]] = []
         seen: set[str] = set()
+        ws_by_id: Dict[str, Memory] = {m.id: m for m in working_set}
 
         for mem in working_set:
             if mem.id in seen:
@@ -181,6 +182,10 @@ class ConsolidationEngine:
             cluster_ids = [mem.id]
             for neighbor_id, _dist in neighbors:
                 if neighbor_id != mem.id and neighbor_id not in seen:
+                    neighbor = ws_by_id.get(neighbor_id)
+                    # Don't cluster across different memory types
+                    if neighbor and neighbor.memory_type != mem.memory_type:
+                        continue
                     cluster_ids.append(neighbor_id)
 
             if len(cluster_ids) >= 2:

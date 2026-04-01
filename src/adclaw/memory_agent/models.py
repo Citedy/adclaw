@@ -23,6 +23,9 @@ def _uuid4() -> str:
 # Core domain models
 # ---------------------------------------------------------------------------
 
+MemoryType = Literal["user", "feedback", "project", "reference"]
+
+
 class Memory(BaseModel):
     """A single memory entry."""
 
@@ -30,6 +33,7 @@ class Memory(BaseModel):
     content: str
     content_hash: str = ""
     source_type: Literal["mcp_tool", "skill", "chat", "file_inbox", "manual"] = "manual"
+    memory_type: MemoryType = "user"
     source_id: str = ""
     entities: List[str] = Field(default_factory=list)
     topics: List[str] = Field(default_factory=list)

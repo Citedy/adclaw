@@ -12,6 +12,9 @@ from .store import MemoryStore
 
 logger = logging.getLogger(__name__)
 
+# Feedback memories get a score boost so corrections rank higher in results
+_FEEDBACK_BOOST = 1.5
+
 _SYNTHESIS_PROMPT = """You are a memory retrieval assistant. Based on the following memory entries,
 answer the user's question. Cite memories using [Memory #<id>] format.
 
@@ -92,12 +95,18 @@ class QueryAgent:
         else:
             merged = []
 
-        # 4. Fetch full memories
-        citations: List[MemorySearchResult] = []
-        for doc_id, score in merged[:max_results]:
+        # 4. Fetch memories, apply feedback boost, THEN slice to max_results
+        # Fetch extra candidates so boosted feedback can be promoted into top-N
+        fetch_limit = min(max_results * 2, len(merged))
+        candidates: List[MemorySearchResult] = []
+        for doc_id, score in merged[:fetch_limit]:
             mem = await self.store.get_memory(doc_id)
             if mem and mem.is_deleted == 0:
-                citations.append(MemorySearchResult(memory=mem, score=score))
+                boosted_score = score * _FEEDBACK_BOOST if mem.memory_type == "feedback" else score
+                candidates.append(MemorySearchResult(memory=mem, score=boosted_score))
+        # Sort by boosted score, then slice to max_results
+        candidates.sort(key=lambda c: c.score, reverse=True)
+        citations = candidates[:max_results]
 
         # 5. Fetch consolidations
         consolidations = await self.store.list_consolidations(limit=5)

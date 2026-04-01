@@ -1098,9 +1098,9 @@ class TelegramChannel(BaseChannel):
             await bot.send_message(
                 chat_id=chat_id,
                 text=(
-                    "*Chat History Cleared!*\n\n"
-                    "- Session conversation reset\n"
-                    "- Long-term memory preserved\n"
+                    "*History Cleared!*\n\n"
+                    "- Session reset\n"
+                    "- Memory is now empty\n"
                     "- Ready for new conversation"
                 ),
                 parse_mode="Markdown",

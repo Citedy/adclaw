@@ -14,6 +14,7 @@ from .models import AOMConfig, Memory
 from .multimodal import MultimodalProcessor, is_multimodal_file, is_supported_file
 from .sanitizer import MemorySanitizer
 from .store import MemoryStore
+from .type_classifier import classify_memory_type, extract_feedback_structure
 
 logger = logging.getLogger(__name__)
 
@@ -121,6 +122,16 @@ class IngestAgent:
         except Exception as exc:
             logger.debug("Near-dedup check failed (non-fatal): %s", exc)
 
+        # Classify memory type
+        memory_type = classify_memory_type(content, metadata)
+
+        # Extract feedback structure if applicable
+        if memory_type == "feedback":
+            fb_structure = extract_feedback_structure(content)
+            if fb_structure:
+                metadata = metadata or {}
+                metadata["feedback_structure"] = fb_structure
+
         memory = Memory(
             content=content,
             source_type=source_type,
@@ -129,6 +140,7 @@ class IngestAgent:
             topics=topics,
             importance=importance,
             metadata=metadata or {},
+            memory_type=memory_type,
         )
 
         # Generate embedding

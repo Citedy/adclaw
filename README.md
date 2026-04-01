@@ -309,7 +309,8 @@ AdClaw features a dual-layer memory architecture: **ReMe** (per-agent file-based
 | Component | Description |
 |-----------|-------------|
 | **MemoryStore** | SQLite + sqlite-vec + FTS5 — persistent storage with vector and keyword search |
-| **IngestAgent** | Sanitization (33 threat patterns) -> LLM extraction -> embedding -> storage |
+| **IngestAgent** | Sanitization (33 threat patterns) -> type classification -> LLM extraction -> embedding -> storage |
+| **TypeClassifier** | Keyword-based memory typing: `user` (preferences), `feedback` (corrections), `project` (deadlines), `reference` (links). Feedback boosted 1.5x in retrieval |
 | **ConsolidationEngine** | Smart gate logic (event→time→count) + 4-phase pipeline (orient→gather→consolidate→prune) + contradiction detection |
 | **EmbeddingPipeline** | Configurable embedding models for semantic search |
 | **CachedPromptBuilder** | Static/dynamic prompt separation with hash-based caching and per-persona isolation |
@@ -341,8 +342,8 @@ Static/dynamic prompt separation based on patterns from [Claude Code](https://cl
 
 ```
 GET  /api/memory/stats              — memory counts and breakdown
-GET  /api/memory/memories            — list memories (filter by source_type, importance)
-POST /api/memory/memories            — ingest new memory {content, source_type, source_id, skip_llm}
+GET  /api/memory/memories            — list memories (filter by source_type, memory_type, importance)
+POST /api/memory/memories            — ingest new memory {content, source_type, source_id, skip_llm, memory_type?}
 DEL  /api/memory/memories/{id}       — soft-delete a memory
 POST /api/memory/query               — semantic search {question, max_results}
 POST /api/memory/consolidate         — trigger consolidation cycle (includes R4 pruning)

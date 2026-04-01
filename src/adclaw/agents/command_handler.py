@@ -148,9 +148,9 @@ class CommandHandler:
         self.memory.clear_content()
         self.memory.clear_compressed_summary()
         return await self._make_system_msg(
-            "**Chat History Cleared!**\n\n"
-            "- Session conversation reset\n"
-            "- Long-term memory preserved",
+            "**History Cleared!**\n\n"
+            "- Compressed summary reset\n"
+            "- Memory is now empty",
         )
 
     async def _process_compact_str(self, _messages: list[Msg]) -> Msg:

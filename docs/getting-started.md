@@ -1,72 +1,33 @@
 # Getting Started with AdClaw
 
-AdClaw is an AI marketing assistant powered by [Citedy](https://www.citedy.com). It comes with 118 built-in skills (SEO, ads, content, social media, analytics, and more), 52 MCP tools, and works out of the box via Telegram or web chat.
+AdClaw is an AI marketing assistant powered by [Citedy](https://www.citedy.com). It comes with 96 built-in skills (SEO, ads, content, social media, analytics, and more), 52 MCP tools, and works out of the box via Telegram or web chat.
 
 ## Quick Install
 
-### One-line install (recommended)
-
 ```bash
-curl -fsSL https://get.adclaw.app | bash
+curl -sSL https://raw.githubusercontent.com/nttylock/AdClaw/main/install.sh | bash
 ```
 
-This script:
-- Installs Docker if not present
-- Pulls the latest AdClaw image
-- Creates persistent volumes for config and API keys
-- Starts AdClaw on port 8088
-
-**Options:**
+Or with Docker Compose:
 
 ```bash
-# With Telegram bot
-curl -fsSL https://get.adclaw.app | bash -s -- --telegram-token "YOUR_BOT_TOKEN"
-
-# Custom port
-curl -fsSL https://get.adclaw.app | bash -s -- --port 9090
-
-# Update to latest
-curl -fsSL https://get.adclaw.app | bash -s -- --update
-
-# Uninstall (preserves data by default)
-curl -fsSL https://get.adclaw.app | bash -s -- --uninstall
+git clone https://github.com/nttylock/AdClaw.git
+cd AdClaw
+cp .env.example .env
+# Edit .env with your keys
+docker compose up -d
 ```
 
-**Environment variables** (alternative to flags):
-
-```bash
-TELEGRAM_BOT_TOKEN="123:ABC" CITEDY_API_KEY="citedy_agent_..." \
-  curl -fsSL https://get.adclaw.app | bash
-```
-
-### pip install
-
-```bash
-pip install adclaw
-adclaw init
-adclaw app
-```
-
-### Docker
+## Manual Docker Run
 
 ```bash
 docker run -d --name adclaw \
   --restart unless-stopped \
   -p 8088:8088 \
   -v adclaw-data:/app/working \
-  -v adclaw-secret:/app/working.secret \
   -e CITEDY_API_KEY=your_citedy_agent_key \
   -e TELEGRAM_BOT_TOKEN=your_telegram_bot_token \
   nttylock/adclaw:latest
-```
-
-### Docker Compose
-
-```bash
-git clone https://github.com/Citedy/adclaw.git
-cd adclaw
-cp .env.example .env  # edit with your keys
-docker compose up -d
 ```
 
 ## First-Run Setup
