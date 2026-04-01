@@ -314,6 +314,7 @@ AdClaw features a dual-layer memory architecture: **ReMe** (per-agent file-based
 | **ConsolidationEngine** | Smart gate logic (event→time→count) + 4-phase pipeline (orient→gather→consolidate→prune) + contradiction detection |
 | **EmbeddingPipeline** | Configurable embedding models for semantic search |
 | **CachedPromptBuilder** | Static/dynamic prompt separation with hash-based caching and per-persona isolation |
+| **Coordinator** | Synthesis-driven persona orchestration — reads AOM, LLM analyzes activity, emits TaskStrategy with specific delegations. Continue/pivot/abandon logic |
 
 ### Memory Optimization (R1-R5)
 

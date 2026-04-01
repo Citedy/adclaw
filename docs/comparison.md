@@ -47,7 +47,7 @@ AdClaw started as a CoPaw fork but was reworked extensively (~80% rewritten):
 - **+68 skills** (118 total) — SEO, ads, content, social media, growth hacking, analytics
 - **Multi-agent personas** — each with own identity (SOUL.md), LLM, skills, MCP tools, and cron schedule
 - **@tag routing** — `@researcher find AI trends` in Telegram or Web chat
-- **Coordinator delegation** — one agent orchestrates the rest automatically
+- **Coordinator persona** — synthesis-driven orchestration: reads AOM for persona activity, LLM analyzes results, emits TaskStrategy with specific delegations, continue/pivot/abandon logic
 - **Dashboard page** — persona status cards with model, skills, cron preview
 - **Per-persona chat tabs** — isolated sessions with shared memory
 - **Always-On Memory (AOM)** — vector search, FTS5, 4 typed memory categories (user/feedback/project/reference), smart consolidation with contradiction detection, 5-layer optimization (R1-R5), prompt caching

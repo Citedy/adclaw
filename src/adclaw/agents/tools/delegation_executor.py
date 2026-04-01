@@ -4,6 +4,8 @@ from ..persona_manager import PersonaManager
 
 logger = logging.getLogger(__name__)
 
+DELEGATION_FAILED_PREFIX = "Delegation failed:"
+
 
 def execute_delegation(persona: PersonaConfig, task: str, persona_manager: PersonaManager) -> str:
     """Execute a delegated task by creating a sub-agent with persona config.
@@ -39,4 +41,4 @@ def execute_delegation(persona: PersonaConfig, task: str, persona_manager: Perso
         return response.content if hasattr(response, 'content') else str(response)
     except Exception as e:
         logger.exception(f"Delegation execution failed: {e}")
-        return f"Delegation failed: {str(e)}"
+        return f"{DELEGATION_FAILED_PREFIX} {e}"
