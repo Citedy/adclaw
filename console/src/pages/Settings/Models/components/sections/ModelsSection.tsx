@@ -139,6 +139,7 @@ export function ModelsSection({
             placeholder={t("models.selectProvider")}
             value={selectedProviderId}
             onChange={handleProviderChange}
+            listHeight={300}
             options={eligible.map((p) => ({
               value: p.id,
               label: p.name,

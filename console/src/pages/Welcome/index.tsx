@@ -328,6 +328,7 @@ export default function WelcomePage() {
                   size="large"
                   placeholder="Select LLM provider..."
                   style={{ width: "100%" }}
+                  listHeight={300}
                   value={selectedProvider || undefined}
                   onChange={(val) => {
                     setSelectedProvider(val);
