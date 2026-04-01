@@ -95,7 +95,10 @@ COPY pyproject.toml README.md ./
 COPY src ./src
 # Inject console dist from build stage (vite outputs to ../src/adclaw/console/).
 COPY --from=console-builder /app/src/adclaw/console/ ./src/adclaw/console/
-RUN pip install --no-cache-dir .
+# Install CPU-only PyTorch first (avoids downloading 2GB CUDA build),
+# then install app with [local] extras (sentence-transformers for AOM embeddings).
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu \
+  && pip install --no-cache-dir ".[local]"
 
 # Non-root user for running the app (supervisord stays root for system services).
 RUN groupadd -r adclaw && useradd -r -g adclaw -m -s /bin/bash adclaw \
