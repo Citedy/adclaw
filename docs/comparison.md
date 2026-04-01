@@ -14,8 +14,8 @@ AdClaw is a fully reworked fork of [CoPaw](https://github.com/agentscope-ai/CoPa
 | **Marketing Tools** | 52 via Citedy MCP | None | None | None | None | None |
 | **Chat Channels** | 7 | 20+ | 5 (TG, Discord, Slack, WA, Signal) | 5 | API only | API + Web |
 | **Web Dashboard** | Yes (personas, tabs, cron) | Basic | CLI/TUI | Basic | No | Yes |
-| **Memory** | Dual: ReMe + AOM (vector+FTS) | Markdown files | 3-layer (episodic+semantic+procedural) | ReMe | Short-term | RAG |
-| **Memory Optimization** | R1-R4 (4 layers) | None | LLM summarization | None | None | None |
+| **Memory** | Dual: ReMe + AOM (vector+FTS+smart consolidation) | Markdown files | 3-layer (episodic+semantic+procedural) | ReMe | Short-term | RAG |
+| **Memory Optimization** | R1-R5 (5 layers + contradictions) | None | LLM summarization | None | None | None |
 | **Self-Learning** | Partial (skill-creator + auto-heal) | No | Yes (auto skill creation) | No | No | No |
 | **Security Scanner** | 208 patterns + LLM audit | None (820+ malicious skills found) | Command approval + container isolation | None | None | None |
 | **Self-Healing Skills** | Yes | No | Self-evolution (DSPy+GEPA) | No | No | No |
@@ -50,7 +50,7 @@ AdClaw started as a CoPaw fork but was reworked extensively (~80% rewritten):
 - **Coordinator delegation** — one agent orchestrates the rest automatically
 - **Dashboard page** — persona status cards with model, skills, cron preview
 - **Per-persona chat tabs** — isolated sessions with shared memory
-- **Always-On Memory (AOM)** — vector search, FTS5, consolidation engine, 4-layer optimization
+- **Always-On Memory (AOM)** — vector search, FTS5, smart consolidation with contradiction detection, 5-layer optimization (R1-R5), prompt caching
 - **Memory sanitizer** — 33 threat patterns across 7 categories
 - **Skill security scanner** — 208 patterns, LLM audit, auto-heal
 - **AgentHub integration** — distributed tasks with karma economy
@@ -69,7 +69,7 @@ Hermes Agent (by Nous Research, 7.4K stars) is the closest competitor in philoso
 |---|---|---|
 | Self-learning | No (manual skills) | Yes (auto skill creation from experience) |
 | Self-evolution | Skill auto-fix (patch_skill_script) | DSPy + GEPA prompt evolution |
-| Memory | ReMe + AOM (vector + FTS5 + consolidation) | Episodic (FTS5) + Semantic (Honcho) + Procedural (skills) |
+| Memory | ReMe + AOM (vector + FTS5 + smart consolidation + contradiction detection) | Episodic (FTS5) + Semantic (Honcho) + Procedural (skills) |
 | Skills count | 118 built-in | 40+ bundled |
 | Marketing tools | 52 via Citedy MCP | None |
 | Channels | Telegram, Discord, DingTalk, Feishu, QQ, Console | Telegram, Discord, Slack, WhatsApp, Signal |
@@ -98,4 +98,4 @@ Hermes Agent (by Nous Research, 7.4K stars) is the closest competitor in philoso
 
 ---
 
-*Last updated: 2026-03-24*
+*Last updated: 2026-04-01*
