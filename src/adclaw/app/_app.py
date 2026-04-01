@@ -83,8 +83,14 @@ async def lifespan(app: FastAPI):  # pylint: disable=too-many-statements
             async def _aom_llm_caller(prompt: str) -> str:
                 from ..agents.model_factory import create_model_and_formatter
                 model, _fmt = create_model_and_formatter()
-                from agentscope.message import Msg
-                resp = await model([{"role": "user", "content": prompt}])
+                # Disable streaming for AOM calls — we need the full response
+                orig_stream = getattr(model, "stream", None)
+                model.stream = False
+                try:
+                    resp = await model([{"role": "user", "content": prompt}])
+                finally:
+                    if orig_stream is not None:
+                        model.stream = orig_stream
                 return resp.content if hasattr(resp, "content") else str(resp)
 
             aom_manager = AOMManager(
