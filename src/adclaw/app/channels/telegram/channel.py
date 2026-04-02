@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 import uuid
 from pathlib import Path
 from typing import Any, Optional, Union
@@ -31,7 +32,9 @@ logger = logging.getLogger(__name__)
 TELEGRAM_MAX_MESSAGE_LENGTH = 4096
 TELEGRAM_SEND_CHUNK_SIZE = 4000
 
-_DEFAULT_MEDIA_DIR = Path("~/.adclaw/media/telegram").expanduser()
+_DEFAULT_MEDIA_DIR = Path(
+    os.environ.get("ADCLAW_WORKING_DIR", "~/.adclaw"),
+).expanduser() / "media" / "telegram"
 
 _MEDIA_ATTRS: list[tuple[str, type, Any, str]] = [
     ("document", FileContent, ContentType.FILE, "file_url"),
