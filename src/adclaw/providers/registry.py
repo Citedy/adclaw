@@ -23,6 +23,8 @@ MODELSCOPE_MODELS: List[ModelInfo] = [
 ]
 
 DASHSCOPE_MODELS: List[ModelInfo] = [
+    ModelInfo(id="qwen3.6-plus", name="Qwen3.6 Plus"),
+    ModelInfo(id="qwen3-coder-next", name="Qwen3 Coder Next"),
     ModelInfo(id="qwen3.5-plus", name="Qwen3.5 Plus"),
     ModelInfo(id="qwq-plus", name="QwQ Plus"),
     ModelInfo(id="qwen-max-latest", name="Qwen Max Latest"),
@@ -64,6 +66,8 @@ AZURE_OPENAI_MODELS: List[ModelInfo] = [
 ]
 
 ALIYUN_INTL_MODELS: List[ModelInfo] = [
+    ModelInfo(id="qwen3.6-plus", name="Qwen3.6 Plus"),
+    ModelInfo(id="qwen3-coder-next", name="Qwen3 Coder Next"),
     ModelInfo(id="qwen3.5-plus", name="Qwen3.5 Plus"),
     ModelInfo(id="qwen3-max-2026-01-23", name="Qwen3 Max"),
     ModelInfo(id="qwen3-coder-plus", name="Qwen3 Coder Plus"),
