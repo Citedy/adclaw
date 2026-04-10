@@ -22,7 +22,7 @@
 - **@tag routing** in Telegram — `@researcher find AI trends` sends the message to the right agent
 - **Coordinator delegation** — one agent orchestrates the rest, delegating tasks automatically
 - **Shared memory** — agents read each other's output files for seamless collaboration
-- **118 built-in skills** — SEO, ads, content, social media, analytics, growth hacking
+- **130+ built-in skills** — SEO (19 skills + 30 reference files), ads (18 skills + 23 reference files), content, social media, analytics, growth hacking
 - **25 built-in MCP servers** — browser automation, AI search, SEO, ads, social media, email marketing, CRM, disposable email inboxes, multimodal generation (image/video/speech/music), and more. Enable what you need from the Web UI
 - **52 marketing tools** via Citedy MCP server
 - **Instant file publishing** — upload any file to [here.now](https://here.now), get a shareable link, host static sites, use your own domain
